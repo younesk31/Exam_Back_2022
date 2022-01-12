@@ -1,4 +1,4 @@
-name: Github actions for CA3 with build and deploy
+name: Github actions for Exam Project with build and deploy
 on: 
   push:
     branches: 
