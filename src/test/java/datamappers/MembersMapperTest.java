@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MovieMapperTest {
+class MembersMapperTest {
 
     HttpClient httpClient = new HttpClient();
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();

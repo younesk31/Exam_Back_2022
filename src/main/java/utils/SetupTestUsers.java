@@ -1,12 +1,12 @@
 package utils;
 
 
-import entities.Role;
-import entities.User;
-import entities.WatchList;
+import entities.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class SetupTestUsers {
 
@@ -14,32 +14,45 @@ public class SetupTestUsers {
     EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
     EntityManager em = emf.createEntityManager();
 
-    User user = new User("user", "user1");
-    User user1 = new User("user1", "user1");
-    User admin = new User("admin", "admin1");
+    User user = new User("user", "user1", "address", "50101010", "mail@mail.dk", 1995,5000);
+    User admin = new User("admin", "admin1","address1", "20202020", "mail@mail.sv", 2006,99999);
+
+    Transaction t1 = new Transaction(500);
+    Transaction t2 = new Transaction(1000);
+
+    Assignment a1 = new Assignment("familie","contactinfo");
+
+    DinnerEvent d1 = new DinnerEvent("event","11:30","konventum", "laks", 225.75);
+
+    Role userRole = new Role("user");
+    Role adminRole = new Role("admin");
+
 
     try {
       em.getTransaction().begin();
-      Role userRole = new Role("user");
-      Role adminRole = new Role("admin");
-      WatchList watchList = new WatchList("tt4972582"); // Split
-      WatchList watchList1 = new WatchList("tt11126994"); // Arcane
+
+      // TEST Rolle
       user.addRole(userRole);
-      user1.addRole(userRole);
       admin.addRole(adminRole);
-      user.addToWatchList(watchList);
-      user.addToWatchList(watchList1);
-      user1.addToWatchList(watchList);
-      user1.addToWatchList(watchList1);
-      em.persist(userRole);
-      em.persist(adminRole);
-      em.persist(watchList);
-      em.persist(watchList1);
+      // TEST Transaktion
+      user.addTransaction(t1);
+      admin.addTransaction(t2);
+      // TEST Assignments
+      user.addAssignments(a1);
+      admin.addAssignments(a1);
+      // TEST DinnerEvent
+      d1.addAssignment(a1);
+
+      em.persist(d1);
       em.persist(user);
-      em.persist(user1);
       em.persist(admin);
       em.getTransaction().commit();
-      System.out.println("Users Created!");
+
+      TypedQuery<Transaction> q1 = em.createQuery("select t from Transaction t", Transaction.class);
+      List<Transaction> transactions = q1.getResultList();
+      for (Transaction t: transactions) {
+        System.out.println(t.getUser().getUsername() + ": " + t.getTransactionAmount() + " - Account Balance: "+ t.getUser().getAccountBalance() + " - Role: "+t.getUser().getRolesAsStrings());
+      }
     } catch (Exception e){
       System.out.println(e.getMessage());
     }

@@ -1,8 +1,7 @@
 package facades;
 
 import dtos.MovieDTO;
-import entities.MovieLikes;
-import entities.RenameMe;
+import entities.Assignment;
 import entities.Role;
 import entities.User;
 import org.junit.jupiter.api.*;
@@ -68,11 +67,11 @@ class MovieFacadeTest {
 
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
-            user = new User("user", "user1");
+            //user = new User("user", "user1");
             user.addRole(userRole);
-            admin = new User("admin", "admin1");
+            //admin = new User("admin", "admin1");
             admin.addRole(adminRole);
-            both = new User("user_admin", "user_admin1");
+            //both = new User("user_admin", "user_admin1");
             both.addRole(userRole);
             both.addRole(adminRole);
             em.persist(userRole);
@@ -92,16 +91,7 @@ class MovieFacadeTest {
 //        Remove any data after each test was run
     }
 
-    @Test
-    void addlikeToMovie() {
 
-
-        MovieLikes movieLikes = facade.addlikeToMovie("tt4972582");
-        long before = movieLikes.getQuantity();
-        movieLikes = facade.addlikeToMovie("tt4972582");
-        long after = movieLikes.getQuantity();
-        assertEquals(before,after-1);
-    }
 
     @Test
     void testWatchLater() throws Exception {

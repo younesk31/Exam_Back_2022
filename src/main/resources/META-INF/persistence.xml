@@ -3,8 +3,10 @@
     
     <!-- DO NOT RENAME THE PERSISTENCE UNIT -->
     <persistence-unit name="pu" transaction-type="RESOURCE_LOCAL">
-        <class>entities.MovieLikes</class>
+        <class>entities.Assignment</class>
         <class>entities.WatchList</class>
+        <class>entities.Transaction</class>
+        <class>entities.DinnerEvent</class>
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <!--    <class>entities.RenameMe</class>-->
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
@@ -12,8 +14,12 @@
             <!-- DO NOT remove the line below. It's not set by the  entityUtils.EMF_Creator -->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="eclipselink.canonicalmodel.subpackage" value="xx345y657"/>
-            <property name="javax.persistence.schema-generation.database.action" value="create"/>
-            
+
+                                        <!-- TEST -->
+<!--            <property name="javax.persistence.schema-generation.database.action" value="create"/>-->
+            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+
+
             <!-- You can raise the logging level to one of the following values CONFIG, FINE, FINER, FINEST, ALL for better,
                  but also more verbose, log-info 
                  NOTE in production the values will be set to WARNING to report only potential serious problems

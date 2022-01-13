@@ -5,9 +5,6 @@ import com.google.gson.GsonBuilder;
 import dtos.AddInfoDTO;
 import dtos.ImdbResponseDTO;
 import dtos.MovieDTO;
-import entities.MovieLikes;
-import org.apache.http.client.methods.HttpGet;
-import rest.MovieResource;
 import security.HttpClient;
 
 import java.util.ArrayList;

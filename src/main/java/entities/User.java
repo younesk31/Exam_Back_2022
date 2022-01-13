@@ -3,14 +3,7 @@ package entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -35,36 +28,25 @@ public class User implements Serializable {
   @JoinTable(name = "user_roles", joinColumns = {
     @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
     @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.PERSIST)
   private List<Role> roleList = new ArrayList<>();
 
-  @JoinTable(name = "user_watchlist", joinColumns = {
-          @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
-          @JoinColumn(name = "watchlater_imdb_id", referencedColumnName = "watchlater_imdb_id")})
-  @ManyToMany
-  private List<WatchList> watchList = new ArrayList<>();
+  @Column(name = "address")
+  private String address;
+  @Column(name = "phone")
+  private String phone;
+  @Column(name = "email")
+  private String email;
+  @Column(name = "birth_year")
+  private int birthYear;
+  @Column(name = "balance")
+  private int accountBalance;
 
-  public List<String> getRolesAsStrings() {
-    if (roleList.isEmpty()) {
-      return null;
-    }
-    List<String> rolesAsStrings = new ArrayList<>();
-    roleList.forEach((role) -> {
-        rolesAsStrings.add(role.getRoleName());
-      });
-    return rolesAsStrings;
-  }
+  @ManyToMany(mappedBy = "users",cascade = CascadeType.PERSIST)
+  private List<Assignment> assignments;
 
-  public List<String> getWatchListAsString() {
-    if (watchList.isEmpty()) {
-      return null;
-    }
-    List<String> watchlistString = new ArrayList<>();
-    watchList.forEach((watchListAsString) -> {
-      watchlistString.add(watchListAsString.getWatchLaterImdbId());
-    });
-    return watchlistString;
-  }
+  @OneToMany(mappedBy = "user",cascade = CascadeType.PERSIST)
+  List<Transaction> transaction;
 
   public User() {}
 
@@ -73,17 +55,63 @@ public class User implements Serializable {
     this.password = BCrypt.hashpw(userDTO.getPassword(),BCrypt.gensalt());
   }
 
-  //TODO Change when password is hashed
-   public boolean verifyPassword(String pw){
+  public boolean verifyPassword(String pw){
         return BCrypt.checkpw(pw,this.password);
     }
 
-  public User(String username, String password) {
+  public User(String username, String password, String address, String phone, String email, int birthYear, int accountBalance) {
     this.username = username;
-
+    this.address = address;
+    this.phone = phone;
+    this.email = email;
+    this.birthYear = birthYear;
+    this.accountBalance = accountBalance;
     this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+    this.transaction = new ArrayList<>();
+    this.assignments = new ArrayList<>();
   }
 
+  public List<String> getRolesAsStrings() {
+    if (roleList.isEmpty()) {
+      return null;
+    }
+    List<String> rolesAsStrings = new ArrayList<>();
+    roleList.forEach((role) -> {
+      rolesAsStrings.add(role.getRoleName());
+    });
+    return rolesAsStrings;
+  }
+
+  public List<Transaction> getTransactionDetails() {
+    return transaction;
+  }
+
+  public void addTransaction(Transaction transaction) {
+    this.transaction.add(transaction);
+    if (transaction != null){
+      transaction.setUser(this);
+    }
+  }
+
+  public List<Assignment> getAssignments() {
+    return assignments;
+  }
+
+  public void addAssignments(Assignment assignments) {
+    if (assignments != null){
+      this.assignments.add(assignments);
+      assignments.getUsers().add(this);
+    }
+
+  }
+
+  public List<Transaction> getTransaction() {
+    return transaction;
+  }
+
+  public void setTransaction(List<Transaction> transaction) {
+    this.transaction = transaction;
+  }
 
   public String getUsername() {
     return username;
@@ -113,16 +141,43 @@ public class User implements Serializable {
     roleList.add(userRole);
   }
 
-  public List<WatchList> getWatchList() {
-    return watchList;
+  public String getAddress() {
+    return address;
   }
 
-  public void setWatchList(List<WatchList> watchList) {
-    this.watchList = watchList;
+  public void setAddress(String address) {
+    this.address = address;
   }
 
-  public void addToWatchList(WatchList watched) {
-    watchList.add(watched);
+  public String getPhone() {
+    return phone;
   }
 
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public int getBirthYear() {
+    return birthYear;
+  }
+
+  public void setBirthYear(int birthYear) {
+    this.birthYear = birthYear;
+  }
+
+  public int getAccountBalance() {
+    return accountBalance;
+  }
+
+  public void setAccountBalance(int accountBalance) {
+    this.accountBalance = accountBalance;
+  }
 }
