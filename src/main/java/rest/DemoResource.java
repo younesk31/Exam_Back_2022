@@ -3,13 +3,10 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.UserDTO;
-import entities.Role;
 import facades.UserFacade;
-import utils.AddLikesToDB;
 import utils.EMF_Creator;
 
 import javax.annotation.security.RolesAllowed;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -37,57 +34,6 @@ public class DemoResource {
         return "{\"msg\":\"Hello anonymous\"}";
     }
 
-    //Create Users on Endpoint
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("createusers")
-    public String createUsers() {
-
-        EntityManager em = EMF.createEntityManager();
-
-
-//        User admin = new User("admin", "admin1");
-
-        try {
-            em.getTransaction().begin();
-            Role userRole = new Role("user");
-            Role adminRole = new Role("admin");
-
-
-//      admin.addRole(adminRole);
-
-            em.persist(userRole);
-            em.persist(adminRole);
-
-
-//      em.persist(admin);
-            em.getTransaction().commit();
-            return "Users Created!";
-        } catch (Exception e) {
-            return e.getMessage();
-        } finally {
-            em.close();
-        }
-    }
-
-    @GET
-    @Path("createlikes")
-    public String createlikes(){
-       AddLikesToDB a = new AddLikesToDB();
-
-        a.addlikeToMovie("tt0420233",100);
-        a.addlikeToMovie("tt0376606",90);
-        a.addlikeToMovie("tt2092588",80);
-        a.addlikeToMovie("tt7631146",70);
-        a.addlikeToMovie("tt11012066",60);
-        a.addlikeToMovie("tt0486725",50);
-        a.addlikeToMovie("tt3480822",40);
-        a.addlikeToMovie("tt2085059",30);
-        a.addlikeToMovie("tt4154664",20);
-        a.addlikeToMovie("tt7667038",10);
-
-        return "Dummy likes created";
-    }
 
     @GET
     @Path("user")
@@ -134,7 +80,6 @@ public class DemoResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String deleteUser(@PathParam("name") String name) {
         UserDTO userDTO = facade.deleteUser(name);
-
         System.out.println("User: " + name + " Deleted");
         return gson.toJson(userDTO);
     }
@@ -148,8 +93,7 @@ public class DemoResource {
     public String editUser(String newUser) {
         UserDTO userDTO = gson.fromJson(newUser, UserDTO.class);
         userDTO = facade.updateUser(userDTO);
-        System.out.println("DTO: "+ userDTO.getUsername()+" - "+userDTO.getPassword());
-        System.out.println("String: "+ newUser);
+        System.out.println("Username: "+ userDTO.getUsername()+" - Password: "+userDTO.getPassword());
         return gson.toJson(userDTO);
     }
 }

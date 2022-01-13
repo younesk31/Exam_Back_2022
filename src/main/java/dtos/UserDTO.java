@@ -15,11 +15,9 @@ public class UserDTO {
     private int birthYear;
     private int accountBalance;
 
-
-
     public static List<UserDTO> getDtos(List<User> u){
         List<UserDTO> userDTOSdtos = new ArrayList();
-        u.forEach(um -> userDTOSdtos.add(new UserDTO(um)));
+        u.forEach(dtotoentity -> userDTOSdtos.add(new UserDTO(dtotoentity)));
         return userDTOSdtos;
     }
 

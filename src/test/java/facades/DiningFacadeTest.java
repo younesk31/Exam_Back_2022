@@ -1,7 +1,5 @@
 package facades;
 
-import dtos.MovieDTO;
-import entities.Assignment;
 import entities.Role;
 import entities.User;
 import org.junit.jupiter.api.*;
@@ -14,23 +12,23 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MovieFacadeTest {
+class DiningFacadeTest {
 
     private static EntityManagerFactory emf;
-    private static MovieFacade facade;
+    private static DiningFacade facade;
     private static User user;
     private static User admin;
     private static User both;
 
 
 
-    public MovieFacadeTest() {
+    public DiningFacadeTest() {
     }
 
     @BeforeAll
     public static void setUpClass() {
         emf = EMF_Creator.createEntityManagerFactoryForTest();
-        facade = MovieFacade.getMovieFacade(emf);
+        facade = DiningFacade.getMovieFacade(emf);
 //        EntityManager em = emf.createEntityManager();
 //
 //        try {
@@ -89,33 +87,5 @@ class MovieFacadeTest {
     @AfterEach
     public void tearDown() {
 //        Remove any data after each test was run
-    }
-
-
-
-    @Test
-    void testWatchLater() throws Exception {
-        String actual = facade.addWatchLater(user.getUsername(),"tt4972582");
-        assertTrue(actual.length()>0);
-
-        List<MovieDTO> list = facade.getWatchLaterList(user.getUsername());
-        assertEquals(list.size(),1);
-
-        facade.deleteWatchLater(user.getUsername(),"tt4972582");
-        list = facade.getWatchLaterList(user.getUsername());
-
-        assertEquals(list.size(),0);
-
-    }
-
-
-    @Test
-    void getTopLikedList() throws Exception {
-
-        for (int i = 0; i < 10; i++) {
-            facade.addlikeToMovie("tt4972582");
-        }
-        List<MovieDTO> list = facade.getTopLikedList();
-        assertTrue(list.get(0).getId().equals("tt4972582"));
     }
 }

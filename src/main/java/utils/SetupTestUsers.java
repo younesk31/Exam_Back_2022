@@ -1,6 +1,7 @@
 package utils;
 
 
+import dtos.TransactionDTO;
 import entities.*;
 
 import javax.persistence.EntityManager;
@@ -53,8 +54,11 @@ public class SetupTestUsers {
       for (Transaction t: transactions) {
         System.out.println(t.getUser().getUsername() + ": " + t.getTransactionAmount() + " - Account Balance: "+ t.getUser().getAccountBalance() + " - Role: "+t.getUser().getRolesAsStrings());
       }
+
     } catch (Exception e){
       System.out.println(e.getMessage());
     }
   }
 }
+
+
