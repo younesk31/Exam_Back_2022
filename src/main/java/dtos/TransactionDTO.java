@@ -9,6 +9,7 @@ import java.util.List;
 
 public class TransactionDTO {
 
+    private Integer id;
     private String status;
     private int transactionAmount;
     private Date transactionDate;
@@ -20,6 +21,7 @@ public class TransactionDTO {
     }
 
     public TransactionDTO(Transaction transaction) {
+        this.id = transaction.getId();
         this.status = transaction.getStatus();
         this.transactionAmount = transaction.getTransactionAmount();
         this.transactionDate = transaction.getTransactionDate();
@@ -44,6 +46,14 @@ public class TransactionDTO {
 
     public Date getTransactionDate() {
         return transactionDate;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setTransactionDate(Date transactionDate) {

@@ -16,7 +16,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 @Path("/info")
-public class DemoResource {
+public class MainResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
 
@@ -42,6 +42,15 @@ public class DemoResource {
         String thisuser = securityContext.getUserPrincipal().getName();
         String welcome = "Welcome "+ thisuser;
         return gson.toJson(welcome);
+    }
+
+    @GET
+    @Path("userdata")
+    @RolesAllowed("user")
+    public String getUserData() {
+        String thisuser = securityContext.getUserPrincipal().getName();
+        UserDTO userDTO = facade.getUserData(thisuser);
+        return gson.toJson(userDTO);
     }
 
     @GET

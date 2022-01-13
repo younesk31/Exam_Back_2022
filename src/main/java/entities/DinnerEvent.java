@@ -1,5 +1,7 @@
 package entities;
 
+import dtos.DinnerEventDTO;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,14 @@ public class DinnerEvent {
         this.dish = dish;
         this.priceprperson = priceprperson;
         this.assignments = new ArrayList<>();
+    }
+
+    public DinnerEvent(DinnerEventDTO dinnerEventDTO) {
+        this.eventname = dinnerEventDTO.getEventname();
+        this.time = dinnerEventDTO.getTime();
+        this.location = dinnerEventDTO.getLocation();
+        this.dish = dinnerEventDTO.getDish();
+        this.priceprperson = dinnerEventDTO.getPriceprperson();
     }
 
     public DinnerEvent() {

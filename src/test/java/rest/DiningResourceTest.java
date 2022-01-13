@@ -23,7 +23,7 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class MovieResourceTest {
+class DiningResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
@@ -164,6 +164,10 @@ class MovieResourceTest {
 
         assertNotNull(transactionDTOS.size());
         assertTrue(transactionDTOS.size() >= 1);
+
+        for (TransactionDTO transactionDTO : transactionDTOS) {
+            System.out.println("Status: "+transactionDTO.getStatus()+" - Amount: "+transactionDTO.getTransactionAmount()+" - Date: "+transactionDTO.getTransactionDate());
+        }
     }
 
 }

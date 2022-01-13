@@ -9,6 +9,7 @@ import java.util.List;
 
 public class DinnerEventDTO {
 
+    private Integer id;
     private String eventname;
     private String time;
     private String location;
@@ -22,6 +23,7 @@ public class DinnerEventDTO {
     }
 
     public DinnerEventDTO(DinnerEvent dinnerEvent) {
+        this.id = dinnerEvent.getId();
         this.eventname = dinnerEvent.getEventname();
         this.time = dinnerEvent.getTime();
         this.location = dinnerEvent.getLocation();
@@ -67,5 +69,13 @@ public class DinnerEventDTO {
 
     public void setPriceprperson(double priceprperson) {
         this.priceprperson = priceprperson;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

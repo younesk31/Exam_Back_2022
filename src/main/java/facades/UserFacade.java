@@ -86,6 +86,18 @@ public class UserFacade {
         }
     }
 
+    public UserDTO getUserData(String userName) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            User user = em.find(User.class, userName);
+            em.getTransaction().commit();
+            return new UserDTO(user);
+        } finally {
+            em.close();
+        }
+    }
+
     public UserDTO updateUser(UserDTO userDTO) {
         EntityManager em = emf.createEntityManager();
         try {

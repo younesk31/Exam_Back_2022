@@ -1,7 +1,6 @@
 package facades;
 
-import entities.Role;
-import entities.User;
+import entities.*;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
 
@@ -28,24 +27,45 @@ class DiningFacadeTest {
     @BeforeAll
     public static void setUpClass() {
         emf = EMF_Creator.createEntityManagerFactoryForTest();
-        facade = DiningFacade.getMovieFacade(emf);
-//        EntityManager em = emf.createEntityManager();
-//
-//        try {
-//            em.getTransaction().begin();
-//            user = new User("user1", "user1");
-//            admin = new User("admin1", "admin1");
-//            Role userRole = new Role("user");
-//            Role adminRole = new Role("admin");
-//            user.addRole(userRole);
-//            admin.addRole(adminRole);
-//            em.persist(userRole);
-//            em.persist(adminRole);
-//            em.persist(user);
-//            em.getTransaction().commit();
-//        } finally {
-//            em.close();
-//        }
+        facade = DiningFacade.getDiningFacade(emf);
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            em.getTransaction().begin();
+            User user = new User("user", "user1", "address", "50101010", "mail@mail.dk", 1995,5000);
+            User admin = new User("admin", "admin1","address1", "20202020", "mail@mail.sv", 2006,99999);
+
+            Transaction t1 = new Transaction(500);
+            Transaction t2 = new Transaction(1000);
+
+            Assignment a1 = new Assignment("familie","contactinfo");
+
+            DinnerEvent d1 = new DinnerEvent("event","11:30","konventum", "laks", 225.75);
+
+            Role userRole = new Role("user");
+            Role adminRole = new Role("admin");
+
+
+            // TEST Rolle
+            user.addRole(userRole);
+            admin.addRole(adminRole);
+            // TEST Transaktion
+            user.addTransaction(t1);
+            admin.addTransaction(t2);
+            // TEST Assignments
+            user.addAssignments(a1);
+            admin.addAssignments(a1);
+            // TEST DinnerEvent
+            d1.addAssignment(a1);
+
+
+            em.persist(d1);
+            em.persist(user);
+            em.persist(admin);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
     }
 
     @AfterAll
@@ -60,23 +80,37 @@ class DiningFacadeTest {
         try {
             em.getTransaction().begin();
             //Delete existing users and roles to get a "fresh" database
+            em.createQuery("delete from Transaction ").executeUpdate();
+            em.createQuery("delete from Assignment ").executeUpdate();
+            em.createQuery("delete from DinnerEvent ").executeUpdate();
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
 
+            User user = new User("user", "user1", "address", "50101010", "mail@mail.dk", 1995,5000);
+            User admin = new User("admin", "admin1","address1", "20202020", "mail@mail.sv", 2006,99999);
+
+            Transaction t1 = new Transaction(500);
+            Transaction t2 = new Transaction(1000);
+
+            Assignment a1 = new Assignment("familie","contactinfo");
+
+            DinnerEvent d1 = new DinnerEvent("event","11:30","konventum", "laks", 225.75);
+
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
-            //user = new User("user", "user1");
+
+
+            // TEST Rolle
             user.addRole(userRole);
-            //admin = new User("admin", "admin1");
             admin.addRole(adminRole);
-            //both = new User("user_admin", "user_admin1");
-            both.addRole(userRole);
-            both.addRole(adminRole);
-            em.persist(userRole);
-            em.persist(adminRole);
-            em.persist(user);
-            em.persist(admin);
-            em.persist(both);
+            // TEST Transaktion
+            user.addTransaction(t1);
+            admin.addTransaction(t2);
+            // TEST Assignments
+            user.addAssignments(a1);
+            admin.addAssignments(a1);
+            // TEST DinnerEvent
+            d1.addAssignment(a1);
             //System.out.println("Saved test data to database");
             em.getTransaction().commit();
         } finally {
