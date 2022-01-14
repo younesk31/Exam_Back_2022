@@ -4,7 +4,7 @@ on:
     branches: 
     - main
 jobs:
-  CA3-WorkHorse:
+  SP1-WorkHorse:
     runs-on: ubuntu-latest #or ubuntu-latest
     # services:
     #   mysql:

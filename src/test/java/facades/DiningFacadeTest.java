@@ -141,13 +141,4 @@ class DiningFacadeTest {
     public void tearDown() {
 //        Remove any data after each test was run
     }
-
-    @Test
-    void getAllDiningEvents() {
-        List<DinnerEventDTO> dinnerdto = facade.getAllDiningEvents();
-        int idIs3 = dinnerdto.get(0).getId();
-        assertEquals(idIs3,3);
-    }
-
-
 }
