@@ -251,7 +251,7 @@ class DiningResourceTest {
                 .header("x-access-token", securityToken)
                 .body(requestParams.toString())
                 .when()
-                .put("/dining/updatediningevent")
+                .put("/dining/updatediningevent/1")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode());
