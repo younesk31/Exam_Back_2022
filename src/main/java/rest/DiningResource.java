@@ -81,7 +81,7 @@ public class DiningResource {
     // US-2/½
     @GET
     @Path("alltransactions")
-    //@RolesAllowed("admin")
+    @RolesAllowed("admin")
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllTransactions() {
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
@@ -94,18 +94,9 @@ public class DiningResource {
     }
 
     // US-4
-    //Todo mangler
-
-//    public DinnerEvent(DinnerEventDTO dinnerEventDTO) {
-//        this.eventname = dinnerEventDTO.getEventname();
-//        this.time = dinnerEventDTO.getTime();
-//        this.location = dinnerEventDTO.getLocation();
-//        this.dish = dinnerEventDTO.getDish();
-//        this.priceprperson = dinnerEventDTO.getPriceprperson();
-//    }
     @POST
     @Path("createevent")
-    //@RolesAllowed("admin")
+    @RolesAllowed("admin")
     @Produces(MediaType.APPLICATION_JSON)
     public String createDiningEvent(String event) {
         DinnerEventDTO dinnerEventDTO = null;
@@ -122,7 +113,7 @@ public class DiningResource {
     // US-5
     @DELETE
     @Path("removememberfromevent/{username}")
-    //@RolesAllowed("admin")
+    @RolesAllowed("admin")
     @Produces(MediaType.APPLICATION_JSON)
     public String removeMemberFromEvent(@PathParam("username") String username) {
         AssignmentDTO assignmentDTO = null;
@@ -153,7 +144,7 @@ public class DiningResource {
     // US-7
     @DELETE
     @Path("removediningevent")
-    //@RolesAllowed("admin")
+    @RolesAllowed("admin")
     @Produces(MediaType.APPLICATION_JSON)
     public String deleteDiningEvent(String event) {
         DinnerEventDTO dinnerEventDTO = null;

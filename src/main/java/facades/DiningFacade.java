@@ -10,6 +10,7 @@ import entities.Transaction;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -159,6 +160,8 @@ public class DiningFacade {
         try {
             em.getTransaction().begin();
             DinnerEvent dinnerEvent = em.find(DinnerEvent.class, dinnerEventDTO.getId());
+            Assignment assignment = em.find(Assignment.class, dinnerEventDTO.getId());
+            em.remove(assignment);
             em.remove(dinnerEvent);
             em.getTransaction().commit();
             return new DinnerEventDTO(dinnerEvent);
@@ -166,9 +169,5 @@ public class DiningFacade {
             em.close();
         }
     }
-
-
-
-
 
 }

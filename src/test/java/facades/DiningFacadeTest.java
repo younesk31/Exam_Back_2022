@@ -1,5 +1,6 @@
 package facades;
 
+import dtos.DinnerEventDTO;
 import entities.*;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
@@ -7,7 +8,9 @@ import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,9 +18,6 @@ class DiningFacadeTest {
 
     private static EntityManagerFactory emf;
     private static DiningFacade facade;
-    private static User user;
-    private static User admin;
-    private static User both;
 
 
 
@@ -32,15 +32,25 @@ class DiningFacadeTest {
 
         try {
             em.getTransaction().begin();
-            User user = new User("user", "user1", "address", "50101010", "mail@mail.dk", 1995,5000);
-            User admin = new User("admin", "admin1","address1", "20202020", "mail@mail.sv", 2006,99999);
+            //Delete existing users and roles to get a "fresh" database
+            em.createQuery("delete from Transaction ").executeUpdate();
+            em.createQuery("delete from Assignment ").executeUpdate();
+            em.createQuery("delete from DinnerEvent ").executeUpdate();
+            em.createQuery("delete from User").executeUpdate();
+            em.createQuery("delete from Role").executeUpdate();
 
-            Transaction t1 = new Transaction(500);
-            Transaction t2 = new Transaction(1000);
 
-            Assignment a1 = new Assignment("familie","contactinfo");
+            User user = new User("user", "test", "test", "123456789", "test@test.test", 1111,2222);
+            User admin = new User("admin", "test","test", "987654321", "test@test.test", 1111,2222);
 
-            DinnerEvent d1 = new DinnerEvent("event","11:30","konventum", "laks", 225.75);
+            Transaction t1 = new Transaction(1234);
+            Transaction t2 = new Transaction(4321);
+
+            Assignment a1 = new Assignment("test","test");
+
+            DinnerEvent d1 = new DinnerEvent("test","03:03","test", "test", 333.33);
+            DinnerEvent d2 = new DinnerEvent("test","03:03","test", "test", 333.33);
+
 
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
@@ -60,6 +70,7 @@ class DiningFacadeTest {
 
 
             em.persist(d1);
+            em.persist(d2);
             em.persist(user);
             em.persist(admin);
             em.getTransaction().commit();
@@ -86,15 +97,18 @@ class DiningFacadeTest {
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
 
-            User user = new User("user", "user1", "address", "50101010", "mail@mail.dk", 1995,5000);
-            User admin = new User("admin", "admin1","address1", "20202020", "mail@mail.sv", 2006,99999);
 
-            Transaction t1 = new Transaction(500);
-            Transaction t2 = new Transaction(1000);
+            User user = new User("user", "test", "test", "123456789", "test@test.test", 1111,2222);
+            User admin = new User("admin", "test","test", "987654321", "test@test.test", 1111,2222);
 
-            Assignment a1 = new Assignment("familie","contactinfo");
+            Transaction t1 = new Transaction(1234);
+            Transaction t2 = new Transaction(4321);
 
-            DinnerEvent d1 = new DinnerEvent("event","11:30","konventum", "laks", 225.75);
+            Assignment a1 = new Assignment("test","test");
+
+            DinnerEvent d1 = new DinnerEvent("test","03:03","test", "test", 333.33);
+            DinnerEvent d2 = new DinnerEvent("test","03:03","test", "test", 333.33);
+
 
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
@@ -111,7 +125,12 @@ class DiningFacadeTest {
             admin.addAssignments(a1);
             // TEST DinnerEvent
             d1.addAssignment(a1);
-            //System.out.println("Saved test data to database");
+
+
+            em.persist(d1);
+            em.persist(d2);
+            em.persist(user);
+            em.persist(admin);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -122,4 +141,13 @@ class DiningFacadeTest {
     public void tearDown() {
 //        Remove any data after each test was run
     }
+
+    @Test
+    void getAllDiningEvents() {
+        List<DinnerEventDTO> dinnerdto = facade.getAllDiningEvents();
+        int idIs3 = dinnerdto.get(0).getId();
+        assertEquals(idIs3,3);
+    }
+
+
 }

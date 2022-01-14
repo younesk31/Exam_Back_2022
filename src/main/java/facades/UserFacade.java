@@ -58,12 +58,12 @@ public class UserFacade {
 
     public UserDTO createUser(UserDTO userDTO) {
         EntityManager em = emf.createEntityManager();
+
         User user = new User(userDTO);
         Role userRole = new Role("user");
-        user.addRole(userRole);
-
         try {
             em.getTransaction().begin();
+            user.addRole(userRole);
             em.persist(user);
             em.getTransaction().commit();
         } finally {

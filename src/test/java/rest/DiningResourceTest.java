@@ -1,10 +1,14 @@
 package rest;
 
+import com.nimbusds.jose.shaded.json.JSONArray;
+import com.nimbusds.jose.shaded.json.JSONObject;
+import dtos.DinnerEventDTO;
 import dtos.TransactionDTO;
 import entities.*;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.jupiter.api.AfterAll;
@@ -15,6 +19,10 @@ import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.List;
@@ -52,7 +60,6 @@ class DiningResourceTest {
 
     @AfterAll
     public static void closeTestServer() {
-        //Don't forget this, if you called its counterpart in @BeforeAll
         EMF_Creator.endREST_TestWithDB();
         EntityManager em = emf.createEntityManager();
         try{
@@ -88,15 +95,17 @@ class DiningResourceTest {
             em.createQuery("delete from Role").executeUpdate();
 
 
-            User user = new User("user", "user1", "address", "50101010", "mail@mail.dk", 1995,5000);
-            User admin = new User("admin", "admin1","address1", "20202020", "mail@mail.sv", 2006,99999);
+            User user = new User("user", "test", "test", "123456789", "test@test.test", 1111,2222);
+            User admin = new User("admin", "test","test", "987654321", "test@test.test", 1111,2222);
 
-            Transaction t1 = new Transaction(500);
-            Transaction t2 = new Transaction(1000);
+            Transaction t1 = new Transaction(1234);
+            Transaction t2 = new Transaction(4321);
 
-            Assignment a1 = new Assignment("familie","contactinfo");
+            Assignment a1 = new Assignment("test","test");
 
-            DinnerEvent d1 = new DinnerEvent("event","11:30","konventum", "laks", 225.75);
+            DinnerEvent d1 = new DinnerEvent("test","03:03","test", "test", 333.33);
+            DinnerEvent d2 = new DinnerEvent("test","03:03","test", "test", 333.33);
+
 
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
@@ -116,6 +125,7 @@ class DiningResourceTest {
 
 
             em.persist(d1);
+            em.persist(d2);
             em.persist(user);
             em.persist(admin);
             em.getTransaction().commit();
@@ -151,7 +161,7 @@ class DiningResourceTest {
 
     @Test
     void getTransactions() {
-        login("user","user1");
+        login("user","test");
 
         List<TransactionDTO> transactionDTOS;
         transactionDTOS = given()
@@ -164,10 +174,88 @@ class DiningResourceTest {
 
         assertNotNull(transactionDTOS.size());
         assertTrue(transactionDTOS.size() >= 1);
-
-        for (TransactionDTO transactionDTO : transactionDTOS) {
-            System.out.println("Status: "+transactionDTO.getStatus()+" - Amount: "+transactionDTO.getTransactionAmount()+" - Date: "+transactionDTO.getTransactionDate());
-        }
     }
+
+
+    @Test
+    void createDiningEvent() {
+        login("admin","test");
+
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("eventname","TEST");
+        requestParams.put("time","13:30");
+        requestParams.put("location","ARENA");
+        requestParams.put("dish","smørbrød");
+        requestParams.put("priceprperson",250);
+
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .body(requestParams.toString())
+                .when()
+                .post("/dining/createevent")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode());
+    }
+
+    @Test
+    void createDiningEventBuiltToFail() {
+        login("user","test");
+
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("eventname","TEST");
+        requestParams.put("time","13:30");
+        requestParams.put("location","ARENA");
+        requestParams.put("dish","smørbrød");
+        requestParams.put("priceprperson",250);
+
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .body(requestParams.toString())
+                .when()
+                .post("/dining/createevent")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.UNAUTHORIZED_401.getStatusCode());
+    }
+
+    @Test
+    void removeMemberFromEvent() {
+        login("admin","test");
+
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .when()
+                .delete("/dining/removememberfromevent/user")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode());
+    }
+
+    @Test
+    void updateDiningEvent() {
+        login("user","test");
+
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("eventname","TEST");
+        requestParams.put("time","13:30");
+        requestParams.put("location","ARENA");
+        requestParams.put("dish","smørbrød");
+        requestParams.put("priceprperson",9000);
+
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .body(requestParams.toString())
+                .when()
+                .put("/dining/updatediningevent")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode());
+    }
+
 
 }

@@ -71,19 +71,18 @@ public class LoginEndpointTest {
 
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
-            //User user = new User("user", "test");
-            //user.addRole(userRole);
-            //User admin = new User("admin", "test");
-            //admin.addRole(adminRole);
-            //User both = new User("user_admin", "test");
-            //both.addRole(userRole);
-            //both.addRole(adminRole);
+            User user = new User("user", "test", "address", "50101010", "mail@mail.dk", 1995,5000);
+            User admin = new User("admin", "test","address1", "20202020", "mail@mail.sv", 2006,99999);
+            user.addRole(userRole);
+
+            admin.addRole(adminRole);
+
             em.persist(userRole);
             em.persist(adminRole);
-            //em.persist(user);
-            //em.persist(admin);
-            //em.persist(both);
-            //System.out.println("Saved test data to database");
+            em.persist(user);
+            em.persist(admin);
+
+            System.out.println("Saved test data to database");
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -168,31 +167,6 @@ public class LoginEndpointTest {
                 .when()
                 .get("/info/user").then() //Call User endpoint as Admin
                 .statusCode(401);
-    }
-
-    @Test
-    public void testRestForMultiRole1() {
-        login("user_admin", "test");
-        given()
-                .contentType("application/json")
-                .accept(ContentType.JSON)
-                .header("x-access-token", securityToken)
-                .when()
-                .get("/info/admin").then()
-                .statusCode(200);
-
-    }
-
-    @Test
-    public void testRestForMultiRole2() {
-        login("user_admin", "test");
-        given()
-                .contentType("application/json")
-                .header("x-access-token", securityToken)
-                .when()
-                .get("/info/user").then()
-                .statusCode(200);
-
     }
 
     @Test
