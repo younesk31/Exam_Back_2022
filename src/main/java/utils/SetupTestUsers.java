@@ -14,8 +14,10 @@ public class SetupTestUsers {
     EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
     EntityManager em = emf.createEntityManager();
 
-    User user = new User("user", "user1", "address", "50101010", "mail@mail.dk", 1995,5000);
+    User user = new User("user", "user1", "fed address 123", "50101010", "mail@mail.dk", 1995,5000);
+    User user1 = new User("user", "tester", "test adresse 165", "50101010", "mail@mail.dk", 1995,5000);
     User admin = new User("admin", "admin1","address1", "20202020", "mail@mail.sv", 2006,99999);
+    User admin1 = new User("dev", "ax2","address1", "20202020", "mail@mail.sv", 2006,99999);
 
     Transaction t1 = new Transaction(500);
     Transaction t2 = new Transaction(1000);
@@ -33,26 +35,28 @@ public class SetupTestUsers {
 
       // TEST Rolle
       user.addRole(userRole);
+      user1.addRole(userRole);
       admin.addRole(adminRole);
+      admin1.addRole(adminRole);
       // TEST Transaktion
       user.addTransaction(t1);
-      admin.addTransaction(t2);
+      user1.addTransaction(t2);
+      admin.addTransaction(t1);
+      admin1.addTransaction(t2);
       // TEST Assignments
       user.addAssignments(a1);
+      user1.addAssignments(a1);
       admin.addAssignments(a1);
+      admin1.addAssignments(a1);
       // TEST DinnerEvent
       d1.addAssignment(a1);
 
       em.persist(d1);
       em.persist(user);
+      em.persist(user1);
       em.persist(admin);
+      em.persist(admin1);
       em.getTransaction().commit();
-
-      TypedQuery<Transaction> q1 = em.createQuery("select t from Transaction t", Transaction.class);
-      List<Transaction> transactions = q1.getResultList();
-      for (Transaction t: transactions) {
-        System.out.println(t.getUser().getUsername() + ": " + t.getTransactionAmount() + " - Account Balance: "+ t.getUser().getAccountBalance() + " - Role: "+t.getUser().getRolesAsStrings());
-      }
 
     } catch (Exception e){
       System.out.println(e.getMessage());
