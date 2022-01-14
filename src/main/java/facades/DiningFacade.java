@@ -130,11 +130,11 @@ public class DiningFacade {
     }
 
     // US-6
-    public DinnerEventDTO updateDiningEvent(DinnerEventDTO dinnerEventDTO) {
+    public DinnerEventDTO updateDiningEvent(DinnerEventDTO dinnerEventDTO, int id) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            DinnerEvent dinnerEvent = em.find(DinnerEvent.class, dinnerEventDTO.getId());
+            DinnerEvent dinnerEvent = em.find(DinnerEvent.class, id);
 
             // Lidt bøvlet måske vis jeg var klar i hovedet kunne jeg komme på en mindre
             // copy/paste måde at gøre det her på....
@@ -159,8 +159,6 @@ public class DiningFacade {
         try {
             em.getTransaction().begin();
             DinnerEvent dinnerEvent = em.find(DinnerEvent.class, dinnerEventDTO.getId());
-            Assignment assignment = em.find(Assignment.class, dinnerEventDTO.getId());
-            em.remove(assignment);
             em.remove(dinnerEvent);
             em.getTransaction().commit();
             return new DinnerEventDTO(dinnerEvent);

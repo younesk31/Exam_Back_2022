@@ -128,13 +128,13 @@ public class DiningResource {
     // US-6
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("updatediningevent")
+    @Path("updatediningevent/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public String updateDiningEvent(String newDiningEvent) {
+    public String updateDiningEvent(String newDiningEvent,@PathParam("id") int id) {
         DinnerEventDTO dinnerEventDTO = null;
         try {
             dinnerEventDTO = gson.fromJson(newDiningEvent, DinnerEventDTO.class);
-            dinnerEventDTO = facade.updateDiningEvent(dinnerEventDTO);
+            dinnerEventDTO = facade.updateDiningEvent(dinnerEventDTO, id);
             System.out.println("Dining-Event named: " + dinnerEventDTO.getEventname() + " Has been Updated!");
         } catch (Exception e) {
             //catch something here before React does

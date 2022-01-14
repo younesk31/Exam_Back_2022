@@ -129,7 +129,6 @@ public class MainResource {
         Role userRole = new Role("user");
         Role adminRole = new Role("admin");
 
-
         try {
             em.getTransaction().begin();
 
