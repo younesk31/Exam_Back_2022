@@ -115,7 +115,7 @@ public class MainResource {
         EntityManager em = EMF.createEntityManager();
 
         User user = new User("user", "user1", "fed address 123", "50101010", "mail@mail.dk", 1995,5000);
-        User user1 = new User("user", "tester", "test adresse 165", "50101010", "mail@mail.dk", 1995,5000);
+        User user1 = new User("user1", "tester", "test adresse 165", "50101010", "mail@mail.dk", 1995,5000);
         User admin = new User("admin", "admin1","address1", "20202020", "mail@mail.sv", 2006,99999);
         User admin1 = new User("dev", "ax2","address1", "20202020", "mail@mail.sv", 2006,99999);
 
