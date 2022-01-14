@@ -1,6 +1,7 @@
 package security;
 
 import entities.User;
+
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class UserPrincipal implements Principal {
 
-  private String username;
+  private final String username;
   private List<String> roles = new ArrayList<>();
 
   /* Create a UserPrincipal, given the Entity class User*/

@@ -2,11 +2,9 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sun.xml.internal.bind.v2.TODO;
 import dtos.AssignmentDTO;
 import dtos.DinnerEventDTO;
 import dtos.TransactionDTO;
-import dtos.UserDTO;
 import facades.DiningFacade;
 import utils.EMF_Creator;
 
@@ -41,7 +39,7 @@ public class DiningResource {
         List<DinnerEventDTO> dinnerEventDTOList = new ArrayList<>();
         try {
             dinnerEventDTOList = facade.getAllDiningEvents();
-        } catch (Exception e){
+        } catch (Exception e) {
             //catch something here before React does
         }
         return gson.toJson(dinnerEventDTOList);
@@ -73,11 +71,12 @@ public class DiningResource {
             String thisuser = securityContext.getUserPrincipal().getName();
             transactionDTOS = facade.getMemberTransactions(thisuser);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             //catch something here before React does
         }
         return gson.toJson(transactionDTOS);
     }
+
     // US-2/½
     @GET
     @Path("alltransactions")
@@ -87,7 +86,7 @@ public class DiningResource {
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
         try {
             transactionDTOS = facade.getAllTransactions();
-        } catch (Exception e){
+        } catch (Exception e) {
             //catch something here before React does
         }
         return gson.toJson(transactionDTOS);
@@ -104,7 +103,7 @@ public class DiningResource {
             dinnerEventDTO = gson.fromJson(event, DinnerEventDTO.class);
             dinnerEventDTO = facade.createDiningEvent(dinnerEventDTO);
             System.out.println("Created a new Dining-Event: " + event);
-        } catch (Exception e){
+        } catch (Exception e) {
             //catch something here before React does
         }
         return gson.toJson(dinnerEventDTO);
@@ -120,11 +119,12 @@ public class DiningResource {
         try {
             assignmentDTO = facade.removeMemberFromAssignmentAndDiningEvent(username);
             System.out.println("User: " + username + " Removed from Dining-Event!");
-        } catch (Exception e){
+        } catch (Exception e) {
             //catch something here before React does
         }
         return gson.toJson(assignmentDTO);
     }
+
     // US-6
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -133,14 +133,15 @@ public class DiningResource {
     public String updateDiningEvent(String newDiningEvent) {
         DinnerEventDTO dinnerEventDTO = null;
         try {
-        dinnerEventDTO = gson.fromJson(newDiningEvent, DinnerEventDTO.class);
-        dinnerEventDTO = facade.updateDiningEvent(dinnerEventDTO);
-        System.out.println("Dining-Event named: "+ dinnerEventDTO.getEventname() + " Has been Updated!");
-        } catch (Exception e){
+            dinnerEventDTO = gson.fromJson(newDiningEvent, DinnerEventDTO.class);
+            dinnerEventDTO = facade.updateDiningEvent(dinnerEventDTO);
+            System.out.println("Dining-Event named: " + dinnerEventDTO.getEventname() + " Has been Updated!");
+        } catch (Exception e) {
             //catch something here before React does
         }
         return gson.toJson(dinnerEventDTO);
     }
+
     // US-7
     @DELETE
     @Path("removediningevent")
@@ -152,14 +153,11 @@ public class DiningResource {
             dinnerEventDTO = gson.fromJson(event, DinnerEventDTO.class);
             dinnerEventDTO = facade.deleteDiningEvent(dinnerEventDTO);
             System.out.println("Dining-Event: " + event + " Removed!");
-        } catch (Exception e){
+        } catch (Exception e) {
             //catch something here before React does
         }
         return gson.toJson(dinnerEventDTO);
     }
-
-
-
 
 
 }

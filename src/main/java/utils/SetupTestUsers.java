@@ -1,7 +1,6 @@
 package utils;
 
 
-import dtos.TransactionDTO;
 import entities.*;
 
 import javax.persistence.EntityManager;

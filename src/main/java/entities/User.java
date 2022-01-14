@@ -1,14 +1,14 @@
 package entities;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import dtos.UserDTO;
+import org.mindrot.jbcrypt.BCrypt;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import dtos.UserDTO;
-import org.mindrot.jbcrypt.BCrypt;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")

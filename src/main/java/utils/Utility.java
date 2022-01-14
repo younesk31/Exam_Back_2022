@@ -5,17 +5,18 @@
  */
 package utils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.Properties;
 import java.util.Set;
-import com.google.gson.*;
-import java.io.UnsupportedEncodingException;
 
 /**
  *
  * @author tha
  */
 public class Utility {
-    private static Gson gson = new GsonBuilder().create();
+    private static final Gson gson = new GsonBuilder().create();
     
     public static void printAllProperties() {
             Properties prop = System.getProperties();

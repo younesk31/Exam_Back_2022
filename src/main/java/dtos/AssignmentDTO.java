@@ -1,7 +1,6 @@
 package dtos;
 
 import entities.Assignment;
-import entities.Transaction;
 
 import java.util.ArrayList;
 import java.util.Date;

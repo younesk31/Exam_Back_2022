@@ -3,20 +3,11 @@ package facades;
 import dtos.UserDTO;
 import entities.Role;
 import entities.User;
+import security.errorhandling.AuthenticationException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.core.HttpHeaders;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.impl.client.HttpClients;
-import security.errorhandling.AuthenticationException;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
